@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,19 +7,63 @@
   <style>
     body {
       font-family: Arial, sans-serif;
-      text-align: center;
-      padding: 40px;
       background-color: #f5f5f0;
+      padding: 40px;
+      text-align: center;
     }
     .logo {
       max-width: 200px;
       margin-bottom: 30px;
     }
-    iframe {
+    .form-container {
+      background: #ffffff;
+      padding: 30px;
+      max-width: 400px;
+      margin: 0 auto;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    form {
       width: 100%;
-      max-width: 640px;
-      height: 1500px;
+    }
+    input[type="text"],
+    input[type="email"] {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0 20px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 16px;
+      box-sizing: border-box;
+    }
+    .left-align {
+     text-align: left;
+     width: 100%;
+    }
+    .checkbox-group {
+      text-align: left;
+      margin-bottom: 20px;
+    }
+    .checkbox-group label {
+      display: block;
+      margin: 5px 0;
+      font-size: 15px;
+    }
+    button {
+      background-color: #29839c;
+      color: white;
       border: none;
+      padding: 12px 20px;
+      font-size: 16px;
+      border-radius: 6px;
+      cursor: pointer;
+      width: 100%;
+    }
+    button:hover {
+      background-color: #206276;
     }
   </style>
 </head>
@@ -29,14 +72,66 @@
   <img src="Plotaris_Main.png" alt="Plotaris Logo" class="logo">
   <br>
 
-  <body>
-  I’m building a clean, no-code plotting tool with built-in lightweight statistical features<br>
-  designed to help you skip the mess of Excel, the cost of Minitab and avoid the overhead of coding.
-  <br><br>
-  Want to help shape it — or join the beta?</body>
+  <p>
+    We're building Plotaris, a no-code plotting tool with built-in<br>
+    lightweight statistical features<br>
+    designed to help you skip the mess of Excel, the cost of <br>
+    Minitab and avoid the overhead of coding.
+    <br><br>
+    Want to help shape it — or join the beta?
+  </p>
   <br>
 
-  <!-- Replace this iframe with your own Google Form embed code -->
-  <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSc2CjV2GzjHmBSsESVUHBNVzOLoj2M9SCi4a2O5Q8LYmtYmVA/viewform?embedded=true" width="640" height="2010" frameborder="0" marginheight="0" marginwidth="0">Loading…</iframe>
+  <div class="form-container">
+    <form id="plotaris-form">
+      <p class="left-align"><strong>What’s the biggest frustration or limitation with your current tool?</strong></p>
+      <input type="text" name="entry.451975937" placeholder="Answer" required>
+
+      <p class="left-align"><strong>Want to help shape the new tool or join the beta?</strong></p>
+      <input type="text" name="entry.309947169" placeholder="Email (Optional):">
+
+      <div class="checkbox-group">
+        <p><strong>What tools do you currently use to create charts or plots?</strong></p>
+        <label><input type="checkbox" class="feature-checkbox" name="entry.1206946930" value="Excel"> Excel</label>
+        <label><input type="checkbox" class="feature-checkbox" name="entry.1206946930" value="Minitab"> Minitab</label>
+        <label><input type="checkbox" class="feature-checkbox" name="entry.1206946930" value="Python"> Python</label>
+        <label><input type="checkbox" class="feature-checkbox" name="entry.1206946930" value="R"> R</label>
+        <label><input type="checkbox" class="feature-checkbox" name="entry.1206946930" value="Matlab"> Matlab</label>
+        <label><input type="checkbox" class="feature-checkbox" name="entry.1206946930" value="Google Sheets"> Google Sheets</label>
+        <label><input type="checkbox" class="feature-checkbox" name="entry.1206946930" value="__other_option__"> Other:</label>
+        <input type="text" name="entry.1206946930.other_option_response" placeholder="Please specify">
+      </div>
+
+      <button type="submit">Submit</button>
+    </form>
+  </div>
+
+  <script>
+    document.getElementById('plotaris-form').addEventListener('submit', function (e) {
+      e.preventDefault();
+
+      const form = e.target;
+      const formData = new FormData(form);
+
+      // At least one checkbox must be selected
+      const checkboxes = form.querySelectorAll('.feature-checkbox');
+      const oneChecked = Array.from(checkboxes).some(cb => cb.checked);
+      if (!oneChecked) {
+        alert('Please select at least one tool you currently use.');
+        return;
+      }
+
+      fetch('https://docs.google.com/forms/d/e/1FAIpQLSc2CjV2GzjHmBSsESVUHBNVzOLoj2M9SCi4a2O5Q8LYmtYmVA/formResponse', {
+        method: 'POST',
+        mode: 'no-cors',
+        body: formData
+      }).then(() => {
+        form.innerHTML = "<p><strong>Thanks! Your response has been recorded. 🎉</strong></p>";
+      }).catch(() => {
+        alert("Oops! Something went wrong. Please try again later.");
+      });
+    });
+  </script>
+
 </body>
 </html>
